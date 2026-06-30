@@ -114,7 +114,7 @@ export function FeaturedFilms({ films }: FeaturedFilmsProps) {
         {displayFilms.length === 4 && (
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3 md:grid-rows-[auto_auto]">
             {/* First film: hero card spanning 2 columns and 2 rows */}
-            <div className="md:col-span-2 md:row-span-2 min-h-[50dvh] md:min-h-[70dvh]">
+            <div className="min-h-[60dvh] md:col-span-2 md:row-span-2 md:min-h-[70dvh]">
               <FilmCard film={displayFilms[0]} index={0} className="h-full" />
             </div>
 

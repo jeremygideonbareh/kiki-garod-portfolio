@@ -1,2 +1,2 @@
-:HL["/kiki-garod-portfolio/_next/static/chunks/12zc7zpg1trp0.css","style"]
-0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"HxZauRdRTd9h0TXx07Lhr"}
+:HL["/kiki-garod-portfolio/_next/static/chunks/17sw668226rj1.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":16,"slots":{"children":{"name":"/_not-found","param":null,"prefetchHints":0,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":0,"slots":null}}}}},"staleTime":300,"buildId":"L1qDhuWXIxAqHeASd5Q0w"}

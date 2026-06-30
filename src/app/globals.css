@@ -131,3 +131,19 @@ html.lenis body {
 .lenis.lenis-smooth iframe {
   pointer-events: none;
 }
+
+/* Mobile touch anti-jank */
+* {
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+}
+
+img, video, canvas {
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Prevent pull-to-refresh on mobile when Lenis is active */
+html.lenis body {
+  overscroll-behavior: none;
+}

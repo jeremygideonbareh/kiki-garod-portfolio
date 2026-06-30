@@ -12,17 +12,17 @@ interface KineticMarqueeProps {
 function renderMarqueeContent(films: Film[]) {
   return films.map((film, i) => (
     <span key={film.id} className="inline-flex items-center">
-      <a
-        href={`#film-${film.id}`}
-        className="font-heading text-5xl text-foreground/80 transition-colors hover:text-amber-400/70 whitespace-nowrap md:text-6xl"
-      >
-        {film.title}
-      </a>
-      {i < films.length - 1 && (
-        <span className="mx-6 select-none text-white/10 text-5xl md:mx-8 md:text-6xl">
-          ·
-        </span>
-      )}
+        <a
+          href={`#film-${film.id}`}
+          className="font-heading text-3xl text-foreground/80 transition-colors hover:text-amber-400/70 whitespace-nowrap md:text-4xl lg:text-6xl"
+        >
+          {film.title}
+        </a>
+        {i < films.length - 1 && (
+          <span className="mx-4 select-none text-white/10 text-3xl md:mx-6 md:text-4xl lg:mx-8 lg:text-6xl">
+            ·
+          </span>
+        )}
     </span>
   ))
 }
@@ -101,10 +101,10 @@ export function KineticMarquee({ films }: KineticMarqueeProps) {
   return (
     <section
       ref={containerRef}
-      className="relative overflow-hidden py-20 md:py-28 cursor-pointer select-none"
+      className="relative overflow-hidden py-16 md:py-28 cursor-pointer select-none"
     >
       {/* Row 1 — scrolling left */}
-      <div className="mb-6 md:mb-8">
+      <div className="mb-4 md:mb-8">
         <div ref={row1Ref} className="flex w-max items-center">
           {renderMarqueeContent(films)}
           {renderMarqueeContent(films)}

@@ -14,6 +14,7 @@ interface HorizontalGalleryProps {
 export function HorizontalGallery({ films }: HorizontalGalleryProps) {
   const prefersReducedMotion = useReducedMotion()
   const lenis = useLenis()
+  const [isMobile, setIsMobile] = useState(false)
 
   const sectionRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
@@ -26,7 +27,14 @@ export function HorizontalGallery({ films }: HorizontalGalleryProps) {
   }, [])
 
   useEffect(() => {
-    if (prefersReducedMotion) return
+    setIsMobile(window.innerWidth < 768)
+    const handleResize = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
+  useEffect(() => {
+    if (prefersReducedMotion || isMobile) return
 
     const section = sectionRef.current
     const track = trackRef.current
@@ -73,7 +81,7 @@ export function HorizontalGallery({ films }: HorizontalGalleryProps) {
     return () => {
       ctx.revert()
     }
-  }, [films, prefersReducedMotion])
+  }, [films, prefersReducedMotion, isMobile])
 
   const handleCTAClick = useCallback(() => {
     if (lenis) {
@@ -83,15 +91,15 @@ export function HorizontalGallery({ films }: HorizontalGalleryProps) {
     }
   }, [lenis])
 
-  if (prefersReducedMotion) {
+  if (prefersReducedMotion || isMobile) {
     return (
-      <section className="overflow-x-auto bg-background">
-        <div className="flex">
+      <section className="bg-background">
+        <div className="flex flex-col">
           {films.map((film, index) => (
           <div
             key={film.id}
             id={`film-${film.id}`}
-            className="relative w-screen min-h-[100dvh] flex-shrink-0 overflow-hidden"
+            className="relative min-h-[70dvh] overflow-hidden"
           >
             <img
               src={film.stills[0]}
@@ -100,22 +108,22 @@ export function HorizontalGallery({ films }: HorizontalGalleryProps) {
               loading={index === 0 ? "eager" : "lazy"}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-black/10" />
-            <div className="relative z-10 flex h-full min-h-[100dvh] flex-col justify-end p-8 md:p-16 pb-24">
-              <p className="text-sm tracking-[0.2em] text-white/60 mb-2 font-sans">
+            <div className="relative z-10 flex h-full min-h-[70dvh] flex-col justify-end p-6 pb-24">
+              <p className="text-xs tracking-[0.2em] text-white/60 mb-2 font-sans">
                 {film.year} &middot; {film.type}
               </p>
-              <h2 className="font-heading text-5xl md:text-8xl text-white leading-[0.95]">
+              <h2 className="font-heading text-4xl text-white leading-[0.95] md:text-8xl">
                 {film.title}
               </h2>
             </div>
           </div>
         ))}
-        <div className="flex w-screen min-h-[100dvh] flex-shrink-0 items-center justify-center bg-background p-8">
+        <div className="flex min-h-[50dvh] flex-shrink-0 items-center justify-center bg-background p-6">
             <div className="text-center max-w-lg">
-              <h2 className="font-heading text-4xl md:text-6xl text-foreground mb-4 leading-[1.1]">
+              <h2 className="font-heading text-3xl text-foreground mb-4 leading-[1.1] md:text-6xl">
                 View Selected Work
               </h2>
-              <p className="text-muted-foreground mb-8 font-sans text-lg">
+              <p className="text-muted-foreground mb-8 font-sans text-base">
                 Explore the complete filmography of Kiki Garod
               </p>
               <button
@@ -149,7 +157,7 @@ export function HorizontalGallery({ films }: HorizontalGalleryProps) {
               filter: "blur(0px)",
               transform: "scale(1)",
               transition:
-                "filter 0.8s cubic-bezier(0.22, 1, 0.36, 1), transform 0.8s cubic-bezier(0.22, 1, 0.36, 1)",
+                "filter 0.6s ease, transform 0.6s ease",
             }}
           >
             <img

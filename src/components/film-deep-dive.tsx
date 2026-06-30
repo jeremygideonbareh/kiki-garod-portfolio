@@ -16,6 +16,7 @@ interface FilmDeepDiveProps {
 export function FilmDeepDive({ films }: FilmDeepDiveProps) {
   const prefersReducedMotion = useReducedMotion()
   const lenis = useLenis()
+  const [isMobile, setIsMobile] = useState(false)
 
   const sectionRef = useRef<HTMLDivElement>(null)
   const trackRef = useRef<HTMLDivElement>(null)
@@ -27,6 +28,13 @@ export function FilmDeepDive({ films }: FilmDeepDiveProps) {
   const [currentFilm, setCurrentFilm] = useState(0)
   const [isAnimating, setIsAnimating] = useState(false)
 
+  useEffect(() => {
+    setIsMobile(window.innerWidth < 768)
+    const handleResize = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
   const setSlideRef = useCallback((el: HTMLDivElement | null, index: number) => {
     slidesRef.current[index] = el
   }, [])
@@ -37,7 +45,7 @@ export function FilmDeepDive({ films }: FilmDeepDiveProps) {
 
   // GSAP horizontal scroll
   useEffect(() => {
-    if (prefersReducedMotion) return
+    if (prefersReducedMotion || isMobile) return
 
     const section = sectionRef.current
     const track = trackRef.current
@@ -143,15 +151,15 @@ export function FilmDeepDive({ films }: FilmDeepDiveProps) {
   const hasPrev = currentFilm > 0
   const hasNext = currentFilm < films.length - 1
 
-  // Reduced motion: static horizontal scroll fallback
-  if (prefersReducedMotion) {
+  // Reduced motion / Mobile: vertical stack fallback
+  if (prefersReducedMotion || isMobile) {
     return (
-      <section className="overflow-x-auto bg-background">
-        <div className="flex">
+      <section className="bg-background">
+        <div className="flex flex-col">
           {films.map((film, index) => (
             <div
               key={film.id}
-              className="relative w-screen min-h-[100dvh] flex-shrink-0 overflow-hidden"
+              className="relative min-h-[80dvh] overflow-hidden"
             >
               <img
                 src={film.stills[0]}
@@ -160,20 +168,20 @@ export function FilmDeepDive({ films }: FilmDeepDiveProps) {
                 loading={index === 0 ? "eager" : "lazy"}
               />
               <div className="absolute inset-0 bg-black/60" />
-              <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/50 to-transparent" />
-              <div className="relative z-10 flex h-full min-h-[100dvh] items-center p-8 md:p-16">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
+              <div className="relative z-10 flex h-full min-h-[80dvh] items-center p-6">
                 <div className="max-w-lg">
-                  <div className="flex items-center gap-3 text-sm tracking-[0.15em] text-white/60 font-sans mb-3">
+                  <div className="flex items-center gap-3 text-xs tracking-[0.15em] text-white/60 font-sans mb-3">
                     <span>{film.year}</span>
                     <span className="h-1 w-1 rounded-full bg-white/30" />
                     <span>{film.type}</span>
                     <span className="h-1 w-1 rounded-full bg-white/30" />
                     <span>{film.duration}</span>
                   </div>
-                  <h2 className="font-heading text-5xl md:text-6xl text-white leading-[1.05] mb-4">
+                  <h2 className="font-heading text-3xl md:text-6xl text-white leading-[1.05] mb-4">
                     {film.title}
                   </h2>
-                  <p className="text-base text-white/70 font-sans leading-relaxed mb-6">
+                  <p className="text-sm text-white/70 font-sans leading-relaxed mb-6">
                     {film.synopsis}
                   </p>
                   {film.awards.length > 0 && (
@@ -188,7 +196,7 @@ export function FilmDeepDive({ films }: FilmDeepDiveProps) {
                       ))}
                     </div>
                   )}
-                  <Button variant="outline" size="lg">
+                  <Button variant="outline" size="lg" className="h-10 rounded-xl text-xs px-6">
                     Watch Trailer
                   </Button>
                 </div>
@@ -231,7 +239,7 @@ export function FilmDeepDive({ films }: FilmDeepDiveProps) {
             {/* Info panel */}
             <div
               ref={(el) => setPanelRef(el, index)}
-              className="relative z-10 flex h-full min-h-[100dvh] items-center p-8 md:p-16"
+              className="relative z-10 flex h-full min-h-[100dvh] items-center p-6 md:p-16"
               style={{
                 opacity: 0,
                 transform: "translateX(60px)",

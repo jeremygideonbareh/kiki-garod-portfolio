@@ -31,74 +31,46 @@ const SOCIAL_LINKS = [
 export function ContactSection() {
   const prefersReducedMotion = useReducedMotion()
   const sectionRef = useRef<HTMLDivElement>(null)
+  const contentRef = useRef<HTMLDivElement>(null)
 
   const { scrollYProgress } = useScroll({
     target: sectionRef,
     offset: ["start end", "end start"],
   })
 
-  // Kinetic scroll — heading moves faster than the subtext
-  const headingY = useTransform(scrollYProgress, [0, 0.3], [120, 0])
-  const headingOpacity = useTransform(scrollYProgress, [0, 0.2], [0, 1])
-  const subtextY = useTransform(scrollYProgress, [0, 0.3], [60, 0])
-  const subtextOpacity = useTransform(scrollYProgress, [0.1, 0.3], [0, 1])
-  const ctaOpacity = useTransform(scrollYProgress, [0.2, 0.4], [0, 1])
-  const ctaY = useTransform(scrollYProgress, [0.2, 0.4], [40, 0])
-  const socialOpacity = useTransform(scrollYProgress, [0.3, 0.5], [0, 1])
-  const socialY = useTransform(scrollYProgress, [0.3, 0.5], [30, 0])
-  const footerOpacity = useTransform(scrollYProgress, [0.5, 0.7], [0, 1])
+  // Two transforms for the whole content block instead of per-element
+  const contentY = useTransform(scrollYProgress, [0, 0.4], [80, 0])
+  const contentOpacity = useTransform(scrollYProgress, [0, 0.25], [0, 1])
 
   return (
-    <section ref={sectionRef} className="bg-background py-32">
-      <div className="mx-auto flex max-w-4xl flex-col items-center px-6 text-center">
-        {/* Big heading — kinetic scroll */}
-        <motion.h2
-          className="font-heading text-[clamp(3rem,8vw,6rem)] leading-[1.05] tracking-tight text-foreground"
-          style={
-            prefersReducedMotion
-              ? undefined
-              : {
-                  y: headingY,
-                  opacity: headingOpacity,
-                }
-          }
-        >
+    <section ref={sectionRef} className="bg-background py-20 md:py-32">
+      <motion.div
+        ref={contentRef}
+        className="mx-auto flex max-w-4xl flex-col items-center px-6 text-center"
+        style={
+          prefersReducedMotion
+            ? undefined
+            : { y: contentY, opacity: contentOpacity }
+        }
+      >
+        {/* Big heading */}
+        <h2 className="font-heading text-[clamp(2.5rem,8vw,6rem)] leading-[1.05] tracking-tight text-foreground">
           Let&rsquo;s Create
           <br />
           Something
-        </motion.h2>
+        </h2>
 
         {/* Subtext */}
-        <motion.p
-          className="mt-6 max-w-xl font-sans text-lg leading-relaxed text-muted-foreground md:text-xl"
-          style={
-            prefersReducedMotion
-              ? undefined
-              : {
-                  y: subtextY,
-                  opacity: subtextOpacity,
-                }
-          }
-        >
+        <p className="mt-6 max-w-xl font-sans text-base leading-relaxed text-muted-foreground md:text-xl">
           Based in Shillong, Meghalaya — available for commissions worldwide.
-        </motion.p>
+        </p>
 
         {/* CTAs */}
-        <motion.div
-          className="mt-10 flex flex-wrap items-center justify-center gap-4"
-          style={
-            prefersReducedMotion
-              ? undefined
-              : {
-                  y: ctaY,
-                  opacity: ctaOpacity,
-                }
-          }
-        >
+        <div className="mt-8 md:mt-10 flex flex-col items-center gap-3 md:flex-row md:gap-4">
           <Button
             variant="default"
             size="lg"
-            className="h-11 rounded-xl px-8 text-sm font-medium tracking-wide"
+            className="h-11 w-full rounded-xl px-8 text-sm font-medium tracking-wide md:w-auto"
             onClick={() => {
               window.location.href = "mailto:hello@kikigarod.com"
             }}
@@ -108,27 +80,17 @@ export function ContactSection() {
           <Button
             variant="outline"
             size="lg"
-            className="h-11 rounded-xl border-white/10 px-8 text-sm font-medium tracking-wide"
+            className="h-11 w-full rounded-xl border-white/10 px-8 text-sm font-medium tracking-wide md:w-auto"
             onClick={() => {
               window.location.href = "mailto:hello@kikigarod.com?subject=CV%20Request"
             }}
           >
             Request CV
           </Button>
-        </motion.div>
+        </div>
 
         {/* Social links row */}
-        <motion.div
-          className="mt-16 flex items-center gap-6"
-          style={
-            prefersReducedMotion
-              ? undefined
-              : {
-                  y: socialY,
-                  opacity: socialOpacity,
-                }
-          }
-        >
+        <div className="mt-12 md:mt-16 flex items-center gap-6">
           {SOCIAL_LINKS.map((link) => {
             const Icon = link.icon
             return (
@@ -144,16 +106,13 @@ export function ContactSection() {
               </a>
             )
           })}
-        </motion.div>
+        </div>
 
         {/* Footer */}
-        <motion.p
-          className="mt-20 font-sans text-xs text-muted-foreground/50"
-          style={prefersReducedMotion ? undefined : { opacity: footerOpacity }}
-        >
+        <p className="mt-16 md:mt-20 font-sans text-xs text-muted-foreground/50">
           &copy; 2026 Kiki Garod Studio. Crafted in the Khasi Hills.
-        </motion.p>
-      </div>
+        </p>
+      </motion.div>
     </section>
   )
 }

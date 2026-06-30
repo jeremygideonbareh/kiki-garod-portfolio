@@ -29,10 +29,8 @@ export function PhilosophySection() {
 
   const words = HEADING_TEXT.split(" ")
 
-  const wordTransforms = words.map((_, i) => {
-    const offset = 15 + i * 10
-    return useTransform(scrollYProgress, [0, 1], [offset, -offset])
-  })
+  // Single transform for the whole heading instead of per-word
+  const headingY = useTransform(scrollYProgress, [0, 1], [40, -40])
 
   // Parallax for mood images
   const image1Y = useTransform(scrollYProgress, [0, 1], [80, -80])
@@ -42,36 +40,33 @@ export function PhilosophySection() {
   const quoteOpacity = useTransform(scrollYProgress, [0.6, 0.85], [0, 1])
   const quoteY = useTransform(scrollYProgress, [0.6, 0.85], [40, 0])
 
+  const disableMotion = prefersReducedMotion
+
   return (
     <section
       ref={sectionRef}
-      className="relative overflow-hidden bg-background py-32"
+      className="relative overflow-hidden bg-background py-24 md:py-32"
     >
       <div className="mx-auto max-w-7xl px-6">
         {/* Split layout */}
-        <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-24">
+        <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-24">
           {/* Left — Heading + Body */}
           <div className="space-y-8">
-            <h2 className="font-heading text-6xl leading-[1.08] tracking-tight text-foreground md:text-7xl lg:text-8xl">
+            <h2 className="font-heading text-[clamp(2.5rem,6vw,6rem)] leading-[1.08] tracking-tight text-foreground md:text-7xl lg:text-8xl">
               {words.map((word, i) => (
-                <motion.span
+                <span
                   key={`${word}-${i}`}
                   className="mr-[0.2em] inline-block"
-                  style={
-                    prefersReducedMotion
-                      ? undefined
-                      : { y: wordTransforms[i] ?? 0 }
-                  }
                 >
                   {word}
-                </motion.span>
+                </span>
               ))}
             </h2>
 
             <motion.p
-              className="max-w-lg font-sans text-lg leading-relaxed text-muted-foreground md:text-xl"
-              initial={prefersReducedMotion ? undefined : { opacity: 0, y: 24 }}
-              whileInView={prefersReducedMotion ? undefined : { opacity: 1, y: 0 }}
+              className="max-w-lg font-sans text-base leading-relaxed text-muted-foreground md:text-xl"
+              initial={disableMotion ? undefined : { opacity: 0, y: 24 }}
+              whileInView={disableMotion ? undefined : { opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, delay: 0.3, ease: "easeOut" }}
             >
@@ -80,10 +75,10 @@ export function PhilosophySection() {
           </div>
 
           {/* Right — Mood Images */}
-          <div className="relative space-y-6">
+          <div className="relative space-y-4 md:space-y-6">
             <motion.div
               className="overflow-hidden rounded-2xl"
-              style={prefersReducedMotion ? undefined : { y: image1Y }}
+              style={disableMotion ? undefined : { y: image1Y }}
             >
               <img
                 src={MOOD_IMAGES[0].src}
@@ -94,7 +89,7 @@ export function PhilosophySection() {
             </motion.div>
             <motion.div
               className="overflow-hidden rounded-2xl"
-              style={prefersReducedMotion ? undefined : { y: image2Y }}
+              style={disableMotion ? undefined : { y: image2Y }}
             >
               <img
                 src={MOOD_IMAGES[1].src}
@@ -108,17 +103,17 @@ export function PhilosophySection() {
 
         {/* Quote block */}
         <motion.div
-          className="mt-32 text-center"
+          className="mt-16 md:mt-32 text-center"
           style={
-            prefersReducedMotion
+            disableMotion
               ? undefined
               : { opacity: quoteOpacity, y: quoteY }
           }
         >
-          <blockquote className="font-heading text-3xl italic leading-snug text-foreground/80 md:text-4xl">
+          <blockquote className="font-heading text-2xl italic leading-snug text-foreground/80 md:text-4xl">
             &ldquo;Every frame is a story waiting to be told.&rdquo;
           </blockquote>
-          <p className="mt-4 font-sans text-base text-muted-foreground">
+          <p className="mt-4 font-sans text-sm text-muted-foreground md:text-base">
             — Kiki Garod
           </p>
         </motion.div>
