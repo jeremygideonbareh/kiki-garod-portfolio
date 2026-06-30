@@ -1,20 +1,12 @@
 import type { NextConfig } from "next";
 
-const isGithubActions = process.env.GITHUB_ACTIONS === "true";
-
-let basePath = "";
-let assetPrefix = "";
-
-if (isGithubActions) {
-  const repo = process.env.GITHUB_REPOSITORY?.replace(/.*?\//, "") ?? "";
-  basePath = `/${repo}`;
-  assetPrefix = `/${repo}`;
-}
+const repo = "kiki-garod-portfolio";
 
 const nextConfig: NextConfig = {
   output: "export",
-  basePath,
-  assetPrefix,
+  distDir: "docs",
+  basePath: `/${repo}`,
+  assetPrefix: `/${repo}`,
   images: {
     unoptimized: true,
   },
