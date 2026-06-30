@@ -107,9 +107,13 @@
   display: none;
 }
 
-html.lenis,
+html.lenis {
+  height: auto;
+}
+
 html.lenis body {
   height: auto;
+  overflow: hidden;
 }
 
 .lenis.lenis-smooth {
