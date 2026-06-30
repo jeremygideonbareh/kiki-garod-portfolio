@@ -18,29 +18,31 @@ export function LenisProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     gsap.registerPlugin(ScrollTrigger)
+    gsap.ticker.lagSmoothing(0)
 
     const instance = new Lenis({
-      duration: 1.0,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      lerp: 0.08,
       orientation: "vertical",
       smoothWheel: true,
-      wheelMultiplier: 1.2,
-      touchMultiplier: 1.8,
+      syncTouch: true,
+      touchInertiaExponent: 1.2,
+      wheelMultiplier: 1.5,
+      touchMultiplier: 2.5,
+      overscroll: false,
     })
 
     setLenis(instance)
 
     instance.on("scroll", ScrollTrigger.update)
 
-    let rafId: number
-    function raf(time: number) {
-      instance.raf(time)
-      rafId = requestAnimationFrame(raf)
+    const tickerCallback: gsap.TickerCallback = (time) => {
+      instance.raf(time * 1000)
     }
-    rafId = requestAnimationFrame(raf)
+
+    gsap.ticker.add(tickerCallback)
 
     return () => {
-      cancelAnimationFrame(rafId)
+      gsap.ticker.remove(tickerCallback)
       instance.destroy()
     }
   }, [])

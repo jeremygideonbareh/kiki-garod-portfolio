@@ -113,7 +113,6 @@ html.lenis {
 
 html.lenis body {
   height: auto;
-  overflow: hidden;
 }
 
 .lenis.lenis-smooth {
@@ -141,9 +140,4 @@ html.lenis body {
 img, video, canvas {
   -webkit-user-select: none;
   user-select: none;
-}
-
-/* Prevent pull-to-refresh on mobile when Lenis is active */
-html.lenis body {
-  overscroll-behavior: none;
 }
